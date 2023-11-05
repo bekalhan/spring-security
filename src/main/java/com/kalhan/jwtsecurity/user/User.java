@@ -1,5 +1,6 @@
 package com.kalhan.jwtsecurity.user;
 
+import com.kalhan.jwtsecurity.token.Token;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +30,9 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
     //kullanıcıların yetkilerini döndğrmek için bu metot kullanılır.Kullanıcının hangi rolleri olduğunu belirler
     @Override
