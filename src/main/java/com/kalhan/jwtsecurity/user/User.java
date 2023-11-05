@@ -37,7 +37,7 @@ public class User implements UserDetails {
     //kullanıcıların yetkilerini döndğrmek için bu metot kullanılır.Kullanıcının hangi rolleri olduğunu belirler
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return role.getAuthorities();
     }
 
     @Override

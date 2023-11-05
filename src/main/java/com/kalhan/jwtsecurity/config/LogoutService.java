@@ -23,7 +23,6 @@ public class LogoutService implements LogoutHandler {
             Authentication authentication) {
         final String authHeader = request.getHeader("Authorization");
     final String jwt;
-        System.out.println("Auth header"+authHeader);
     if(authHeader == null || !authHeader.startsWith("Bearer ")){
         return;
     }
