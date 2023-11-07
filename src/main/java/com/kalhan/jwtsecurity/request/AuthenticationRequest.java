@@ -1,4 +1,4 @@
-package com.kalhan.jwtsecurity.auth;
+package com.kalhan.jwtsecurity.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

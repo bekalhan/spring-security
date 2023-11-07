@@ -1,4 +1,4 @@
-package com.kalhan.jwtsecurity.config;
+package com.kalhan.jwtsecurity.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

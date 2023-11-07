@@ -1,4 +1,4 @@
-package com.kalhan.jwtsecurity.user;
+package com.kalhan.jwtsecurity.enumPackage;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

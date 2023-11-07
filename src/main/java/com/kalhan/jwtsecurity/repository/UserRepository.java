@@ -1,5 +1,6 @@
-package com.kalhan.jwtsecurity.user;
+package com.kalhan.jwtsecurity.repository;
 
+import com.kalhan.jwtsecurity.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

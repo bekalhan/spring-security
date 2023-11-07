@@ -1,6 +1,6 @@
-package com.kalhan.jwtsecurity.auth;
+package com.kalhan.jwtsecurity.request;
 
-import com.kalhan.jwtsecurity.user.Role;
+import com.kalhan.jwtsecurity.enumPackage.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

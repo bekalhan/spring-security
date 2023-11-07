@@ -1,10 +1,13 @@
-package com.kalhan.jwtsecurity.auth;
+package com.kalhan.jwtsecurity.controller;
 
-import jakarta.servlet.http.HttpServlet;
+import com.kalhan.jwtsecurity.request.AuthenticationRequest;
+import com.kalhan.jwtsecurity.request.RegisterRequest;
+import com.kalhan.jwtsecurity.request.VerificationRequest;
+import com.kalhan.jwtsecurity.response.AuthenticationResponse;
+import com.kalhan.jwtsecurity.service.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,14 +23,23 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/register")
+  /*  @PostMapping("/register")
     public ResponseEntity<?> register(
             @RequestBody RegisterRequest request
     ){
         var response = authenticationService.register(request);
         if(request.getMfaEnabled()){
-            return ResponseEntity.accepted().build();
+            return ResponseEntity.ok(request);
+
         }
+        return ResponseEntity.accepted().build();
+
+    }*/
+
+    @PostMapping("/register")
+    public ResponseEntity<AuthenticationResponse> register(
+            @RequestBody RegisterRequest request
+    ){
         return ResponseEntity.ok(authenticationService.register(request));
     }
 

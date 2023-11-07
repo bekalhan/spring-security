@@ -1,14 +1,16 @@
-package com.kalhan.jwtsecurity.auth;
+package com.kalhan.jwtsecurity.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kalhan.jwtsecurity.config.JwtService;
+import com.kalhan.jwtsecurity.request.AuthenticationRequest;
+import com.kalhan.jwtsecurity.request.RegisterRequest;
+import com.kalhan.jwtsecurity.request.VerificationRequest;
+import com.kalhan.jwtsecurity.response.AuthenticationResponse;
 import com.kalhan.jwtsecurity.tfa.TwoFactorAuthenticationService;
-import com.kalhan.jwtsecurity.token.Token;
-import com.kalhan.jwtsecurity.token.TokenRepository;
-import com.kalhan.jwtsecurity.token.TokenType;
-import com.kalhan.jwtsecurity.user.Role;
-import com.kalhan.jwtsecurity.user.User;
-import com.kalhan.jwtsecurity.user.UserRepository;
+import com.kalhan.jwtsecurity.entity.Token;
+import com.kalhan.jwtsecurity.repository.TokenRepository;
+import com.kalhan.jwtsecurity.enumPackage.TokenType;
+import com.kalhan.jwtsecurity.entity.User;
+import com.kalhan.jwtsecurity.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,7 +19,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,21 +47,26 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
-                .mfaEnabled(request.getMfaEnabled())
+                //.mfaEnabled(request.getMfaEnabled())
                 .build();
         // if MFA enbaled -> Generate secret
-        if(request.getMfaEnabled()){
+        /*if(request.getMfaEnabled()){
             user.setSecret(twoFactorAuthenticationService.generateNewString());
-        }
+        }*/
         User savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(savedUser,jwtToken);
-        return AuthenticationResponse.builder()
+       /* return AuthenticationResponse.builder()
                 .secretImageUri(twoFactorAuthenticationService.generateQrCodeImageUri(user.getSecret()))
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .mfaEnabled(user.getMfaEnabled())
+                .build();*/
+                return AuthenticationResponse.builder()
+                .secretImageUri(twoFactorAuthenticationService.generateQrCodeImageUri(user.getSecret()))
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -72,12 +78,12 @@ public class AuthenticationService {
                 )
         );
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-        if(user.getMfaEnabled()){
+        /*if(user.getMfaEnabled()){
             return AuthenticationResponse.builder()
                     .accessToken("")
                     .refreshToken("")
                     .mfaEnabled(true).build();
-        }
+        }*/
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
@@ -85,7 +91,7 @@ public class AuthenticationService {
         return new AuthenticationResponse().builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
-                .mfaEnabled(false)
+                //.mfaEnabled(false)
                 .build();
     }
 

@@ -1,9 +1,8 @@
-package com.kalhan.jwtsecurity.config;
+package com.kalhan.jwtsecurity.service;
 
-import com.kalhan.jwtsecurity.token.TokenRepository;
+import com.kalhan.jwtsecurity.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

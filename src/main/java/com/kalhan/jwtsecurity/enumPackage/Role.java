@@ -1,4 +1,4 @@
-package com.kalhan.jwtsecurity.user;
+package com.kalhan.jwtsecurity.enumPackage;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.kalhan.jwtsecurity.user.Permission.*;
+import static com.kalhan.jwtsecurity.enumPackage.Permission.*;
 
 @RequiredArgsConstructor
 public enum Role {

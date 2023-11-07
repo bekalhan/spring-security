@@ -1,5 +1,6 @@
-package com.kalhan.jwtsecurity.token;
+package com.kalhan.jwtsecurity.repository;
 
+import com.kalhan.jwtsecurity.entity.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -1,15 +1,14 @@
 package com.kalhan.jwtsecurity;
 
-import com.kalhan.jwtsecurity.auth.AuthenticationService;
-import com.kalhan.jwtsecurity.auth.RegisterRequest;
+import com.kalhan.jwtsecurity.service.AuthenticationService;
+import com.kalhan.jwtsecurity.request.RegisterRequest;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-import static com.kalhan.jwtsecurity.user.Role.ADMIN;
-import static com.kalhan.jwtsecurity.user.Role.MANAGER;
+import static com.kalhan.jwtsecurity.enumPackage.Role.ADMIN;
+import static com.kalhan.jwtsecurity.enumPackage.Role.MANAGER;
 
 @SpringBootApplication
 public class JwtSecurityApplication {

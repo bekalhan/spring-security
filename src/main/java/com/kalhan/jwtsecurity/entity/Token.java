@@ -1,6 +1,6 @@
-package com.kalhan.jwtsecurity.token;
+package com.kalhan.jwtsecurity.entity;
 
-import com.kalhan.jwtsecurity.user.User;
+import com.kalhan.jwtsecurity.enumPackage.TokenType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
