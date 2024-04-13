@@ -1,0 +1,10 @@
+        UserDetailsService  -> loadUserByUsername(String username)
+                   |
+                   |
+                   |
+            UserDetailsManager -> createUser(UserDetails user) - updateUser(UserDetails user) - deleteUser(UserDetails user)
+        |           |            |  - changePassword(String oldPaw,String newPaw) - userExist(String username)
+        |           |            |
+        |           |            |
+ InMemoryUser  JdbcUserDetails LdapUserDetails
+ DetailsManager   Manager       Manager

@@ -1,0 +1,92 @@
+                    ********Spring security İnternal flow*******
+
+                            Authentication
+                                   |
+                                   |  2
+                   1               |            3                           4
+User entered   -------->    Spring security  ------->     Authentication  ------->  Authentication
+                   10                           8                           7
+ credentials   <--------        Filters     <--------       Manager      <--------     Providers
+                                    |                                                   |       |
+                                    |  9                                                |  5    | 6
+                                    |                                                   |       |
+                                Security                                        UserDetails   Password
+                                 Context                                       /Manager       Encoder
+                                                                                    Service
+
+
+1-Spring security olmadan
+=>Spring bootda istekler dispatcher servlet tarafından yönetilir bu dispatcher servletin temel görevi aslında isteği doğru contollerla
+matchlemektir.bunu da şu şekil yapar ilk önce bir ioc container oluşturur ioc container beansleri dependencyleri yöneten bir yapıdır.
+daha sonra dispatcherservlet webapplicationContext diye birşey oluşturur ioc containerin yönetmesi için daha sonra contorller beani
+oluştuğunda dispatcher servlet ioc yi kullanrak bunları matchler.
+
+2-Spring security ile
+=>dispatcher servletin önğne bir securityfilterchain eklenir istekler ilk önce buradan geçer
+
+3-spring security filter
+=>temel olarak securityFilter'in 4 ana görevi vardır
+1-ilk olarak gelen istekten username ve passwordu çıkarması gerekir
+2-Ardından kullanıcı adı ve şifreyi veritabanına göre doğrulaması gerekir.
+3-eğer 2. aşamadan geçmişse kullanıcıın istenne url'ye sahip olup olmadığını kontrol etmeksi gerekir
+4-İstek hayatta kaldıysa dispatcherServleta yönlendirilebilir.
+
+=>spring security projeye dahil edildiğinde sadece isteği bir filtreden geçirmez 15 16 farkli filtreden geçirir.
+SecurityContextPersistenceFilter,HeaderWriterFilter,CsrfFilter,LogoutFilter,UsernamePasswordAuthenticationFilter vb.
+bu filterlardan en son restcontrollerlarra yönlendirilir istek.Bu filtrelerden bağzılarına bakalım
+
+1-BasicAuthenticationFilter => İstekte gelen headerdan kullanıcı bilgileri bulmaya çalışır bulursa email ve şifreyle doğrulamaya çalışır
+2-UsernamePasswordAuthenticationFilter => Kullanıcı adı parola bilgisinin post bodyden bulmaya çalışır ve doğrulamaya çalışır.
+3-DefaultLoginPageGeneratingFilter => Varsayılan giriş sayfası verir.(DEFAULT LOGİN PAGE yapan eleman)
+4-DefaultLogoutPageGeneratingFilter => logout page yapar.
+
+=>bu filterlar bizim için zaten çoğu görevi üstleniyor kalanlar için biz configure ediyoruz projeyi
+
+4-Authenticaton manager
+=>authenticate methodunu sağlar bu method authentication objesi alır bu method kimlik doğrulaması ve yetkilendiirlmesi için
+kullanılır.Birden fazla authenticationproivder kullanabilir ve bu authenticationproviderlardan biri başarılı bir sonuç
+dönene kadar deneme yapabilir.
+
+5-Authenticaon Provider
+=>Görevi authentication objesini alıp eğer valid ise geri döndermek değilse exception throw etmek.gelen bilgileri databaseden yada
+ldap serverdan vb kontrol etmek istiyorsak burada yaparız.birden fazla authenticationrpovider yazılabilir.
+
+UserDetail -> implemente ederek kullanıcıların dbdeki şeklini tanımlayabiliriz
+UserDetailService -> kullanıcı detaylarını veritabanından yükleyen sınıflardır.
+
+authenticate ve support methodu sağlar bu ProviderManger denen bir classdan gelir o da AuthententicatonManagerdan implemnte alır
+authenticayionProvider invoke DaoAuthenticationProviderı
+
+6-PasswordEncoder
+=>Passwordu hashlemek için kullanılan interface
+
+7-SecuriyContext
+=>Authenticate doğrulama yapılmış ise authentication objesi SecurtiyContext(SecurityContextHolder tarafından yönetiliyor)
+depo edilir.
+
+8-localhost:8080/welcome -> secure eklenildi
+
+1-AuthorizationFilter -> doFilter
+2-DefaultLoginPageFilter -> login page için
+3-UsernamePasswordAuthenticationFilter -> username ve password girdin bu filtera geldi burada username password extract edildi
+birde authenticationManager.authenticate() methoıdu kullanıldı
+4-ProviderManagera -> authenticate methodu burada
+5-AbstractUserDetailsAuthenticationProvider bu da DaoAuthenticationProvider buradan extend edilior
+
+*****************Sequence flow********************
+1->User page erişim sağlamak istedi                                                 |
+2->Arka planda AuthorizationFilter,DefaultloginPageFilter gibi filterlar çalıştı     |  -> Spring security Filters
+3->User credentialsalarını girdi                                                    |
+4->UsernamePasswordAuthenticationFilter username ve passwordu extracladı daha sonra |
+UsernamePasswordAuthenticationToken oluşturuldu daha sonra ProviderManagerin        |  -> Authentication Manager(Provider Manager)
+authenticate methodu invoke edildi.                                                 |
+5-AuthenticationManagerden gelen ProviderManager authenticate objesiin sağlayan     |
+authenticationProvider nesnelerini tanımlar ve default olarak                       |   -> AuthenticationProvider(DaoAuthenticaonProviedr)
+DaoAuthenticationProvider içindeki authenticate methodu ProviderManager tarafından  |
+çalıştırılır                                                                        |
+6->DaoAuthenticationProvider loadbyUsername gibi methodları çalıştırarak            |   -> UserDetailsManager/Service
+validate yapmaya çalışır userDetailsden user detaillerini getirmeye çalışır         |   -> PasswordEncoder
+ve passwordEncoder gibi methodlarıda kullanır                                       |
+
+******* Peki her seferinde atılan steklerde bu filtreler uygulanacak mı?
+->atılan istekte header kısmına jseessionid konulur bu expired olmamızsa bida bu filtrelerden geçmez

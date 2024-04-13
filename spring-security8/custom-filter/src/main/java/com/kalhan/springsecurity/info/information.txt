@@ -1,0 +1,25 @@
+************ Security Filter Chain *********
+->security filter chain default olarak 17 filter çalıştırır biz bazen bunları değiştirmek customize etmek isteyebiliriz.
+
+->custom filter için Filter classından implemente almak ve doFilter methodunu override etmeliyiz
+bu metot 3 parametre alır ServletRequest,ServletResponse,filterChain
+
+->Servlet request http requestini temsil eder
+->Servlet response http requestini özelleştirdikten sonra döndüğümüz responsu temsil eder
+->Filter chain next filtera geçmek için kullanırız
+
+->peki artık custom filteri yazdık bunu security filter chaine nasıl ekleyeceğiz?
+
+addFilterBefore(filter,class) -> verdiğin classdan önce bu filteri ekler
+addFİlterAfter(filter,class) -> verdiğin classdan sonra bu filteri ekler
+addFilterIndex(filter,class)
+
+->Bu metotları security configde yazıyoruz görüldüğü gibi yazdığımız filtere hangi filterdan önce koymamız gerektiği için
+filter adlarını ve sıralarını bilmek ve eklediysek test etmek için
+
+main class'a şu anatasyonu ekliyoruz -> @EnableWebSecurity(debug=true)
+application.propertieide -> logging.level.org.springframework.security.web.FilterChainProxy=true
+
+
+->ayrıyeten custom filter oluşturmak için oncePerRequestFilterdan da implemente alınabilir bu class zaten Filterdan
+ürüyor ve her istek için aslında sadece bir kez çalışıyor.

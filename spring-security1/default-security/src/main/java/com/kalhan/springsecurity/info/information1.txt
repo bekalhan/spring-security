@@ -1,0 +1,40 @@
+****Spring security nedir****
+=>Java uygulamarında Authentication(kimlik doğrulama) ve
+ Authorization(yetki) yönetimi kolaylaştırmak için yazılmış bir java framework.
+
+ =>spring security değpendency uygulamaya eklediğinizde default olarak security kısmı aktif olur ve login page atar.
+
+ ****Authentication****
+ =>eğer kişi uygulamaya kayıtl ise giriş yapılabilsin
+ ****Authorization****
+ =>Kişiler uygulamaya giriş yapıyor peki bu kişi normal bir user mı yoksa admin mi?
+ ****Servlet filters****
+ =>.Kullanıcı girişi yapılan bir site düşünelim.Bazı kaynaklara kullanıcı giriş yapmadan erişememesi gerekiyor.
+ Filters içerisinde bu kontrolü yaptırıp eğer kullanıcı giriş yapmış ise yönlendirme işlemini yapabiliriz.
+
+                    Browser ->https://www.mybankacount.com
+                       |
+                       |
+                       |
+                    SecurityFilter -> user authenticate olmussa authorize işlemleri doğruysa geçiş değilse 401
+                        |
+                        |
+                        |
+                    Dispatcher Servlet -> gelen istekleri doğru controllerla eşleştirme
+
+=>temel olarak securityFilter'in 4 ana görevi vardır
+1-ilk olarak gelen istekten username ve passwordu çıkarması gerekir
+2-Ardından kullanıcı adı ve şifreyi veritabanına göre doğrulaması gerekir.
+3-eğer 2. aşamadan geçmişse kullanıcıın istenne url'ye sahip olup olmadığını kontrol etmeksi gerekir
+4-İstek hayatta kaldıysa dispatcherServleta yönlendirilebilir.
+
+=>spring security projeye dahil edildiğinde sadece isteği bir filtreden geçirmez 15 16 farkli filtreden geçirir.
+SecurityContextPersistenceFilter,HeaderWriterFilter,CsrfFilter,LogoutFilter,UsernamePasswordAuthenticationFilter vb.
+bu filterlardan en son restcontrollerlarra yönlendirilir istek.Bu filtrelerden bağzılarına bakalım
+
+1-BasicAuthenticationFilter => İstekte gelen headerdan kullanıcı bilgileri bulmaya çalışır bulursa email ve şifreyle doğrulamaya çalışır
+2-UsernamePasswordAuthenticationFilter => Kullanıcı adı parola bilgisinin post bodyden bulmaya çalışır ve doğrulamaya çalışır.
+3-DefaultLoginPageGeneratingFilter => Varsayılan giriş sayfası verir.(DEFAULT LOGİN PAGE yapan eleman)
+4-DefaultLogoutPageGeneratingFilter => logout page yapar.
+
+=>bu filterlar bizim için zaten çoğu görevi üstleniyor kalanlar için biz configure ediyoruz projeyi

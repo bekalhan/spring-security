@@ -1,0 +1,25 @@
+                    **************************Servlet - Filter**************************
+
+                                                        Spring mvc
+                                    |----------------------------------------------------------------|
+                                    |                                                                |
+            Request                 |                                                                |
+ Sending    ------->   Filters ---->|                                                                |
+                       Filters      |     Dispatcher   --->    Handler  ---->                        |
+ request   <--------   Filters<-----|                                             Controller         |
+            Response                |       Servlet    <---   İnterceptor -->                        |
+                                    |                                                                |
+                                    |                                                                |
+                                    |                                                                |
+                                    |                                                                |
+                                    |                                                                |
+                                    |                                                                |
+                                    |----------------------------------------------------------------|
+
+=>Browser istek gönderir java web applicationımıza java bunları anlayamayacağından java kod ile browser arasına
+servlet container web server apache tomcat gibi yapı girer.Bu eleman http rewuestini http servlet object gibi bir yapıya dönüştürür
+bu da uygulamanın anlayacağı bir objedir aynı şekilde responuda objecten http responsuna çevirir.
+
+
+=>filters ise bir kayanktan gelen istekleri response etmeden o istek üzerinde bir takım manipule etmemizi sağlayan yapıdır.
+Bu sayede istekleri manipule edip ekstra custom bişeler ekleyebiliriz.

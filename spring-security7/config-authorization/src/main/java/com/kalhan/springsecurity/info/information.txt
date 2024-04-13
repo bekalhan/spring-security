@@ -1,0 +1,23 @@
+**************** Authorization ***************
+->spring de authorization için işlemler grantedAuthority üzerinden döner
+
+public interdace GrantedAuthority{
+String getAuthority();
+}
+
+public final class SimpleGrantedAuthority implement GrantedAuthority{
+    private String role;
+
+    public SimpleGrantedAuthority(String role){
+    this.role = role
+    }
+
+    @Override
+    public String getAuthority(){
+    return this.role;
+    }
+}
+
+->bildiğimiz üzere crendetials enter edildiğinde UsernamePasswordAuthenticationFiltera gider ve orda authenticate
+fonksiyonunu çalıştırır parametre olarakta UsernamePasswordToken verir bu UsernmaePasswordToken super classtan
+authoritesleri alır

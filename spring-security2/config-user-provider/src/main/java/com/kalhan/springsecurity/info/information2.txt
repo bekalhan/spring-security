@@ -1,0 +1,28 @@
+************* Password management***********
+
+1-Encoding -> datayı farklı bir biçimde gösteriyoruz çevirdiğimiz yöntem kullanrak insanlar plain texte yine ulaşabilir
+asc|| , base64 , unicode
+
+base64 -> işlenecek veri 3bytelık(24bitlik) veri gruplarına bölünür her 3 byte 4 adet 6 bitlik gruplar şeklinde alınır
+her 6 bitlik grup asc|| dönüştürülür eksik bit varsa 0 larla doldurulur
+
+
+2-Encryption -> güvenliği garanti eder çünkü senin verdiğin keye göre algoritma kullanrak birşeye dönüştürür eğer keyi biliyosan
+decrypleyebilirsin ve şifreyi bulabilirsin.
+
+3-hashing -> matematiksel fonksiyonlar kullanrak benzersiz bir çıktı üretir bu çıktının tersine dönüşmei zor ve imkansızdır.
+peki geri dönmüyorsa user şifreyi girdiğinde onun şifresi olduğunu nasıl anlarız?
+kullanıcı şifreyi girdiğinde aynı hash fonksiyonu ile hashlanir ve hashler karşılaştırılır -- sha-256 bcrypt
+
+->spring securityde bu işlemleri PasswordEncoder diye bir sınıf ile yapıyroz bu sınıfın 3 ana metodu var
+
+1-encode -> girilen değeri konfigurasyonde seçilen hash ile şifreler
+2-matches -> parolayı şifreleyip önceki ile karşılaştırır
+3-upgradeEncoding -> çift şifreleme yapar yavaşlığa neden olur
+
+Spring security içinde yaygın kullanılan hash fonksşyonları ait implementasyonlar bulunur BCryptPasswordEncoder gibi
+bide StandartPasswordEncoder gibi metotlar varda bunlar hashlemiyo plain text ile iş yapıyor.
+
+BcryptPasswordEncoder -> Computation
+ScryptPasswordEncoder -> Computation,memory
+Argon2PasswordEncoder -> Computation,memory,multiple thread

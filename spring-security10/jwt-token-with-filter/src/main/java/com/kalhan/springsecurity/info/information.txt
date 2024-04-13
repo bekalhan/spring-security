@@ -1,0 +1,43 @@
+************ token *********
+->Spring teknolojisinde spring oturum yönetimi için uygulama kalktığında jsessionid diyebir token oluşturulur
+bu sunucu tarafından oluşturulan ve saklanan http oturumunu temsil eden bir tokendir. bu token user datalarını
+verebilen bir token değildir.
+
+****jwt(json web token)****
+
+1-Client(istemci) username(email) ve password girerek sunucu tarafına bir login isteği gönderir
+2-Sunucu gelen isteğin valid olup olmadığını kontrol eder eğer valid değilse 401 unauthhorized döner geçerli ise önceden
+belirlenmiş gizli bir secret_key ile bir token oluşturur bu token client tarafına http isteğinin header kısmında gönderilir.
+3-client gelen bilgiye localstorage gibi bir alanda tutar ve daha sonra yetki gereken tüm işlemlerde (put,delete,update,get)
+header altında bu istek gönderilir ve sunucu bu tokenı kontrol eder eğer kullanıcı erişmicekse 403 forbidden döner.
+
+
+=>JWT base64 ile kodlanmış 3 ana kısımdan oluşmaktadır.Bunlar Header,payload,signature'dur.
+
+1-Header
+{
+    "alg":"HS256", => signature için kullanılacak algoritma adı => hs256,hmac,sha256 gibi algortimalar olabilir
+    "typ":"JWT" => token tipi
+}
+=>bu kısım base64 ile encode edilir.ve oluşturulacak tokenin ilk kısmı oluşturulur.
+
+2-payload =>  bu kısım claimleri içerir bu kısım istemci ve sunucu arasında eşsiz olur.bu kısımda 3 tip claim bilgisi saklanabilir.
+registered,public,private. expired time roller burada verilebilir zorunlu değildir.
+
+{
+    "sub": "1234567890",
+    "name": "John Doe",
+    "iat": 1516239022
+}
+
+3-signature=>Bu kısım son kısımdır bu kısmın oluşturulabilmesi için header payload ve secret key gereklidir.
+
+HMACSHA256(
+    base64UrlEncode(header) + "." +
+    base64UrlEncode(payload),
+    your-256-bit-secret
+)
+
+***jwt doğrulama***
+=>Gelen tokenda header ve payload kısmı sunucumuzda bulunan gizli anahtar ile imzalanır ve 3. kısım elde edilir.daha sonra bu imza
+client tarafından gelen imza ile karşılaştırılır.

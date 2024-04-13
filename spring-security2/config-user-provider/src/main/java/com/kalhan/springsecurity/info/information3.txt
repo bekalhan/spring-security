@@ -1,0 +1,15 @@
+************ Authentication Provider **************
+->provider demekten kastımız kullanıcı bilgilerini getireceği kaynaklara göre AuthenticationProvider sınıfını implemnte
+eden sınıflara verilen isim. -> örneğin db,ldap,oauth2 vb...
+
+->spring varsayılan oalrak DaoAuthenticationProvider kullanıyor Bu sınıfta kullanıcı bilgilerini çekmek için UserDetailsService
+sınıfının loadByUserName methodu kullanılıyor
+
+->varsayılan olrak UserDetailsService sınıfını implemente eden sınıf InMemoryUserDetailsManager’ini kullanıyor
+
+? -> provider birden fazla olabilir auth sistemi nasıl işliyor bu durumda?
+
+->Örneğin 3 provider olsun bunlar db,ldap,memory olsun bu durumda Provider manager algoritması şöyle çalışıyor
+İlk önce db ye bakıyorsa authentica true ise diğerlerine bakmıyor başarısızsa ldapa bakıyor diye gidiyor.
+
+->bu providerlardan şu çalışşın iksii çalışsın sadeece diyorsak bu sefer AuthenticationProvider içindeki supports metodunu kullanıyoruz.

@@ -1,0 +1,13 @@
+*********** method level security **********
+->method level security ile springde metotlara da erişim kısıtlaması getirebiliyoruz bu raddede kullanılan anatosyanlar var
+
+   @PreAuthorize("hasRole('USER')")
+    public Order createOrder(Order order) {
+        // Implementation
+    }
+
+    ->yukarıda rolü user olanlar sadece bu method üzerinde yetki sahibi olacak diyoruz
+
+
+->eğer spring sağlkadığı bu role işlemleri yermez ise PermissionEvaulator diye bir sınıf var oradan implemnte alarak
+bu sınıfın içindeki hasPermission methodunu override ederek kendş logicimizi yazabiliriz.

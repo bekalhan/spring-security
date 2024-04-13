@@ -1,0 +1,27 @@
+*********** CROSS ORIGIN RESOURCE SHARING (CORS) *************
+=>Eğer cliet uygulaması browser'da çalışıyorsa cors politikaları devreye girer.
+herhangi bir siteye brıwser üzerinden giriyosan cookie bilgilerin tutulur kötü niyetli insan seni kendi açtığı bil siteye yönlendirdikten
+sonra o site üzerinden başka siteye yönlendirerek senin kendi bilgisayarında bulunan cookie bilgileri ele geçirebilir.
+Bu bir güvenlik açığıdır bu açığı önleyebilrşiz ama browserlar buna öncelikle kendileri cors politikaswı adında çözüm bulmuştur
+buöylece sen bir site üzerindeylen başka siteye geçmek isteğinde bu politikalar devreye girer.
+cors politikaları 3 şey değişdiğinde devreye girer
+1-2 site arasında protokol farkı
+2-iki site arasında host farkı
+3-iki site arasında port farkı
+
+********** CROSS SİTE REQUEST FORGERY *********
+=>default olarak spring security get isteklerine izin verir fakat update post isteklerine izin vermez sen csrf disable ya da
+csrf'i özelleştirmediğin takdirde.
+
+1-netflix izlemek istedin netflixe giriş yapacaksın crendentials'larını girdin netflix server cookie yaratacak ve senin browserana koyacak
+bu yaratılan cookielar başka domainlerle paylaşılmaz browser bu cookileri sadece original domainde kullandırtcak kadar akıllıdır.
+
+2-daha sonra izledilten sonra farklı bir tabda başka site açtın ve bu sitede zararlı yazılım olan bir linke tıkladın
+
+3-bu zararlı yazılımlar senin cookie bilgilerinle işlem yapabilir
+
+-> bu tip seneryoyu önlemek için csrf tokenler oluşturulur kullanıcı birşey atarken formda bu tokenıda gönderiri token valid
+olup olmadığına bakılarak işlem yapılır
+
+-> eğer zaten o url public ve herkes tarafından erişebilirse bu urle csrf token implemente etmek gerekmiyor bunu
+zaten configde yapıcaz spring security bunu sağlıyotr bize
